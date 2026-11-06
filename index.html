@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#1e0e05" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Palitana &amp; Kolkata Concert Harmonium Studio</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="high-graphics label-mode-both force-landscape-ready">
+
+  <!-- ====================================================================
+       PORTRAIT ORIENTATION BLOCKER OVERLAY (DISABLED SO AUTO-LANDSCAPE WORKS)
+       ==================================================================== -->
+  <div id="orientation-overlay" class="hidden" style="display: none !important;" role="dialog" aria-modal="true" aria-label="Rotate Device">
+    <div class="orientation-card">
+      <div class="phone-rotate-icon" aria-hidden="true">
+        <div class="phone-outline">
+          <div class="phone-notch"></div>
+          <div class="phone-screen-arrows">&#8635;</div>
+        </div>
+      </div>
+      <h2>Landscape Mode Required</h2>
+      <p>This 37-Key Concert Harmonium is engineered for two-handed horizontal performance (left thumb on bellows, right hand on the reed keyboard).</p>
+      <p class="orientation-sub">Rotate your smartphone horizontally or tap below to enter Fullscreen Landscape Studio.</p>
+      <button id="btn-force-landscape" class="brass-cta-btn" type="button">
+        <span class="btn-rivet left"></span>
+        <span>Unlock Audio &amp; Enter Landscape</span>
+        <span class="btn-rivet right"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       FIRST-TAP AUDIO CONTEXT & ACOUSTIC DSP UNLOCK SPLASH
+       ==================================================================== -->
+  <div id="audio-unlock-banner" class="audio-unlock-overlay">
+    <div class="unlock-plaque">
+      <div class="plaque-screw tl"></div>
+      <div class="plaque-screw tr"></div>
+      <div class="plaque-screw bl"></div>
+      <div class="plaque-screw br"></div>
+      <p class="plaque-maker">EST. 1924 &bull; PALITANA &amp; KOLKATA HARMONIUM WORKS</p>
+      <h1>SUR-SANGAM CONCERT GRAND</h1>
+      <p class="plaque-desc">Triple-Reed Burmese Teak Acoustic DSP Synthesizer &bull; Real-Time Bellows Fluid Physics</p>
+      <button id="btn-init-studio" class="brass-cta-btn large" type="button">
+        <span class="btn-rivet left"></span>
+        <span>OPEN BELLOWS LATCH &amp; START STUDIO</span>
+        <span class="btn-rivet right"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MAIN CONCERT HARMONIUM WORKSTATION CHASSIS
+       ==================================================================== -->
+  <main id="harmonium-workstation" aria-label="Indian Classical Harmonium Studio">
+
+    <!-- ==================================================================
+         1. TOP VINTAGE BRASS HUD, OSCILLOSCOPE & STUDIO RECORDER BAR
+         ================================================================== -->
+    <header id="studio-hud-bar">
+      <!-- Maker Badge & Scale Status -->
+      <div class="hud-module hud-brand">
+        <div class="brass-emblem">
+          <span class="emblem-om">&#2384;</span>
+          <div class="emblem-text">
+            <span class="emblem-title">SUR-SANGAM</span>
+            <span class="emblem-sub" id="hud-tuning-badge">22-SHRUTI &bull; 440Hz</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analog PSI Air Reservoir Pressure Gauge -->
+      <div class="hud-module hud-pressure-gauge" title="Bellows Reservoir Air Pressure">
+        <div class="gauge-dial">
+          <div class="gauge-scale">
+            <span class="tick low">0</span>
+            <span class="tick mid">50</span>
+            <span class="tick high">100</span>
+          </div>
+          <div id="pressure-needle" class="gauge-needle"></div>
+          <div class="gauge-cap"></div>
+        </div>
+        <div class="gauge-readout">
+          <span class="hud-label">AIR RESERVOIR</span>
+          <div class="pressure-bar-track">
+            <div id="pressure-bar-fill" class="pressure-bar-fill"></div>
+          </div>
+          <span id="hud-psi-value" class="hud-value">0% PSI</span>
+        </div>
+      </div>
+
+      <!-- Live Swara, Western Note & Frequency Telemetry + Oscilloscope -->
+      <div class="hud-module hud-telemetry">
+        <div class="telemetry-notes">
+          <div class="note-box">
+            <span class="hud-label">SWARA</span>
+            <span id="hud-active-swara" class="swara-display">&mdash;</span>
+          </div>
+          <div class="note-box">
+            <span class="hud-label">PITCH / HZ</span>
+            <span id="hud-active-freq" class="freq-display">0.0 Hz</span>
+          </div>
+        </div>
+        <div class="oscilloscope-frame">
+          <canvas id="hud-oscilloscope" width="160" height="40" aria-label="Live Acoustic Waveform Oscilloscope"></canvas>
+          <span class="scope-grid-overlay"></span>
+        </div>
+      </div>
+
+      <!-- Accompaniment Module: Electronic Tanpura & Tabla Tempo -->
+      <div class="hud-module hud-accompaniment">
+        <div class="accomp-group">
+          <button id="btn-tanpura-toggle" class="brass-pill-btn" type="button" aria-pressed="false" title="Toggle Acoustic Tanpura Drone">
+            <span class="led-dot" id="led-tanpura"></span>
+            <span>TANPURA</span>
+          </button>
+          <button id="btn-tabla-toggle" class="brass-pill-btn" type="button" aria-pressed="false" title="Toggle Teental Tabla Metronome">
+            <span class="led-dot" id="led-tabla"></span>
+            <span>TABLA</span>
+          </button>
+        </div>
+        <div class="tempo-spinner">
+          <button id="btn-bpm-down" class="micro-brass-btn" type="button" title="Decrease BPM">&minus;</button>
+          <span id="hud-bpm-display" class="bpm-readout" title="Tabla Tempo (BPM)">120 <small>BPM</small></span>
+          <button id="btn-bpm-up" class="micro-brass-btn" type="button" title="Increase BPM">+</button>
+        </div>
+      </div>
+
+      <!-- Live Studio Audio Recorder & Export Bar -->
+      <div class="hud-module hud-recorder">
+        <button id="btn-record-toggle" class="recorder-btn rec-arm" type="button" aria-pressed="false" title="Record Live Harmonium Performance">
+          <span class="rec-dot" id="rec-status-dot"></span>
+          <span id="rec-btn-label">REC</span>
+        </button>
+        <span id="rec-timer" class="rec-timer">00:00</span>
+        <button id="btn-record-play" class="recorder-btn" type="button" disabled title="Play Recorded Take">
+          &#9654;
+        </button>
+        <a id="btn-record-download" class="recorder-btn download-link disabled" href="#" download="harmonium-concert-take.webm" title="Download Recorded Audio File">
+          &#8681; SAVE
+        </a>
+      </div>
+
+      <!-- Utility Actions: Academy Tutor, Pro Settings, Fullscreen -->
+      <div class="hud-module hud-actions">
+        <button id="btn-open-academy" class="hud-icon-btn" type="button" title="Help &amp; Raga Learning Academy">
+          <span class="icon-glyph">?</span>
+          <span class="icon-caption">ACADEMY</span>
+        </button>
+        <button id="btn-open-settings" class="hud-icon-btn" type="button" title="Pro Acoustic &amp; Sensor Settings">
+          <span class="icon-glyph">&#9881;</span>
+          <span class="icon-caption">SETTINGS</span>
+        </button>
+        <button id="btn-fullscreen" class="hud-icon-btn" type="button" title="Toggle Fullscreen Mode">
+          <span class="icon-glyph">&#9974;</span>
+          <span class="icon-caption">FULL</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ==================================================================
+         2. ACTIVE RAGA / ALANKAR TUTOR GUIDANCE BANNER (COLLAPSIBLE)
+         ================================================================== -->
+    <section id="tutor-guidance-strip" class="tutor-strip hidden" aria-live="polite">
+      <div class="tutor-strip-left">
+        <span class="tutor-badge">LIVE TUTOR</span>
+        <strong id="tutor-active-title">Raga Yaman</strong>
+        <span id="tutor-active-formula" class="tutor-formula">Aroha: N&#803; R G M&#770; D N S'</span>
+      </div>
+      <div class="tutor-strip-steps" id="tutor-step-sequence">
+        <span class="tutor-prompt">Next Swara: <strong id="tutor-next-swara">Sa (C4)</strong></span>
+      </div>
+      <div class="tutor-strip-controls">
+        <button id="btn-tutor-autoplay" class="micro-brass-btn tutor-btn" type="button">&#9654; Auto-Play Demo</button>
+        <button id="btn-tutor-reset" class="micro-brass-btn tutor-btn" type="button">&#8634; Restart</button>
+        <button id="btn-tutor-close" class="micro-brass-btn tutor-btn danger" type="button">&times; Exit Tutor</button>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         3. MAIN INSTRUMENT DECK (LEFT BELLOWS + RIGHT TEAK CABINET)
+         ================================================================== -->
+    <div id="instrument-stage">
+
+      <!-- ================================================================
+           LEFT COLUMN: MULTI-MODE BELLOWS FLUID PHYSICS ASSEMBLY
+           ================================================================ -->
+      <aside id="bellows-assembly" aria-label="Harmonium Bellows Control">
+        <div class="teak-frame-corner tl"></div>
+        <div class="teak-frame-corner tr"></div>
+        <div class="teak-frame-corner bl"></div>
+        <div class="teak-frame-corner br"></div>
+
+        <div class="bellows-header">
+          <span class="brass-plate-title">DHAMAN (BELLOWS)</span>
+          <span id="bellows-mode-indicator" class="mode-tag">TOUCH PUMP</span>
+        </div>
+
+        <!-- 3D Pleated Leather & Velvet Bellows Visual Chamber -->
+        <div id="bellows-touch-zone" class="bellows-chamber" role="slider" aria-label="Pump Bellows Handle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <!-- 7 Leather Gusset Folds that compress/expand dynamically -->
+          <div class="bellows-folds-container" id="bellows-folds">
+            <div class="leather-fold fold-1"><div class="cardboard-rib"></div></div>
+            <div class="leather-fold fold-2"><div class="cardboard-rib"></div></div>
+            <div class="leather-fold fold-3"><div class="cardboard-rib"></div></div>
+            <div class="leather-fold fold-4"><div class="cardboard-rib"></div></div>
+            <div class="leather-fold fold-5"><div class="cardboard-rib"></div></div>
+            <div class="leather-fold fold-6"><div class="cardboard-rib"></div></div>
+            <div class="leather-fold fold-7"><div class="cardboard-rib"></div></div>
+          </div>
+
+          <!-- Draggable Wooden & Brass Pump Handle Bar -->
+          <div id="bellows-handle" class="bellows-wooden-paddle">
+            <div class="brass-grip-plate">
+              <span class="grip-engraving">DRAG OR TAP TO PUMP AIR</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Ways to Pump Air Controls -->
+        <div class="bellows-input-selectors">
+          <button id="btn-pump-auto" class="pump-mode-btn" type="button" aria-pressed="false" title="Auto-Pump Practice Mode (Constant Air Pressure)">
+            <span class="led-dot" id="led-autopump"></span>
+            <span>AUTO-PUMP</span>
+          </button>
+          <button id="btn-pump-mic" class="pump-mode-btn" type="button" aria-pressed="false" title="Blow Air into Phone Microphone to Pump Bellows">
+            <span class="led-dot" id="led-micpump"></span>
+            <span>MIC BLOW</span>
+          </button>
+          <button id="btn-pump-tilt" class="pump-mode-btn" type="button" aria-pressed="false" title="Rock/Tilt Smartphone to Pump Bellows">
+            <span class="led-dot" id="led-tiltpump"></span>
+            <span>TILT ROCK</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- ================================================================
+           RIGHT COLUMN: BURMESE TEAK CABINET, 7 BRASS STOPS & 37-KEY DECK
+           ================================================================ -->
+      <section id="harmonium-cabinet" aria-label="Harmonium Reed Cabinet and Keyboard">
+
+        <!-- TOP ACOUSTIC VELVET GRILL, SCALE CHANGER & 7 PULL-STOPS PANEL -->
+        <div id="cabinet-control-panel">
+          <!-- Crimson Velvet Acoustic Sound Grill (Left Wing) -->
+          <div class="velvet-sound-grill">
+            <div class="grill-lattice"></div>
+          </div>
+
+          <!-- 4 MAIN REED PULL-STOPS (BASS, MALE, FEMALE, TREMOLO) -->
+          <div class="stops-bank main-stops-bank" role="group" aria-label="Main Reed Stops">
+            <div class="bank-label">MAIN REED STOPS (KALI / SAFED)</div>
+            <div class="stops-row">
+              <!-- Stop 1: Bass Reed (Mandra Sub-Octave) -->
+              <div class="pull-stop-unit" data-stop="bass">
+                <button id="stop-bass" class="brass-stop-knob pulled" type="button" aria-pressed="true" title="Bass Reed Stop (Sub-Octave 16ft Warm Sawtooth)">
+                  <span class="knob-rod"></span>
+                  <span class="knob-face">
+                    <span class="knob-ring"></span>
+                    <span class="knob-title">BASS</span>
+                    <span class="knob-sub">KHARAJ</span>
+                  </span>
+                </button>
+              </div>
+
+              <!-- Stop 2: Male Reed (Fundamental Principal) -->
+              <div class="pull-stop-unit" data-stop="male">
+                <button id="stop-male" class="brass-stop-knob pulled" type="button" aria-pressed="true" title="Male Reed Stop (Fundamental 8ft Rich Brass)">
+                  <span class="knob-rod"></span>
+                  <span class="knob-face">
+                    <span class="knob-ring"></span>
+                    <span class="knob-title">MALE</span>
+                    <span class="knob-sub">NAR</span>
+                  </span>
+                </button>
+              </div>
+
+              <!-- Stop 3: Female Reed (Detuned Chorus / Unison) -->
+              <div class="pull-stop-unit" data-stop="female">
+                <button id="stop-female" class="brass-stop-knob pulled" type="button" aria-pressed="true" title="Female Reed Stop (+3.5c Kolkata Chorus)">
+                  <span class="knob-rod"></span>
+                  <span class="knob-face">
+                    <span class="knob-ring"></span>
+                    <span class="knob-title">FEMALE</span>
+                    <span class="knob-sub">MADA</span>
+                  </span>
+                </button>
+              </div>
+
+              <!-- Stop 4: Tremolo / Vibrato Baffle -->
+              <div class="pull-stop-unit" data-stop="tremolo">
+                <button id="stop-tremolo" class="brass-stop-knob" type="button" aria-pressed="false" title="Mechanical Tremolo Air Baffle (LFO Modulation)">
+                  <span class="knob-rod"></span>
+                  <span class="knob-face">
+                    <span class="knob-ring"></span>
+                    <span class="knob-title">TREMOLO</span>
+                    <span class="knob-sub">KAMPAN</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCALE-CHANGER BRASS LEVER & MECHANICAL OCTAVE COUPLER -->
+          <div class="center-mechanics-module">
+            <!-- Scale Changer Slide Lever (-4 to +4 Semitones) -->
+            <div class="scale-changer-housing" title="Mechanical Scale-Changer Transpose">
+              <div class="scale-header">
+                <span>SCALE CHANGER</span>
+                <strong id="hud-scale-label">Safed 1 (C)</strong>
+              </div>
+              <div class="scale-notches">
+                <button id="btn-scale-down" class="scale-step-btn" type="button" aria-label="Transpose Down">&laquo;</button>
+                <input id="slider-scale-changer" type="range" min="-4" max="4" step="1" value="0" aria-label="Scale Changer Semitones" />
+                <button id="btn-scale-up" class="scale-step-btn" type="button" aria-label="Transpose Up">&raquo;</button>
+              </div>
+            </div>
+
+            <!-- Mechanical Octave Coupler Lever -->
+            <div class="coupler-housing">
+              <button id="btn-coupler-toggle" class="brass-lever-switch active" type="button" aria-pressed="true" title="Mechanical Octave Coupler (Physically couples upper octave key)">
+                <span class="lever-slot"><span class="lever-shaft"></span></span>
+                <span class="lever-caption">COUPLER (JOD)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3 SURPETI DRONE PULL-STOPS (SA, PA, MA) -->
+          <div class="stops-bank drone-stops-bank" role="group" aria-label="Surpeti Drone Stops">
+            <div class="bank-label">SURPETI DRONES (SWAR)</div>
+            <div class="stops-row">
+              <!-- Stop 5: Drone Sa (Tonic) -->
+              <div class="pull-stop-unit" data-stop="droneSa">
+                <button id="stop-drone-sa" class="brass-stop-knob small-knob" type="button" aria-pressed="false" title="Continuous Tonic Drone Stop: Sa (C)">
+                  <span class="knob-rod"></span>
+                  <span class="knob-face">
+                    <span class="knob-ring"></span>
+                    <span class="knob-title">SA</span>
+                    <span class="knob-sub">सा</span>
+                  </span>
+                </button>
+              </div>
+
+              <!-- Stop 6: Drone Pa (Fifth) -->
+              <div class="pull-stop-unit" data-stop="dronePa">
+                <button id="stop-drone-pa" class="brass-stop-knob small-knob" type="button" aria-pressed="false" title="Continuous Fifth Drone Stop: Pa (G)">
+                  <span class="knob-rod"></span>
+                  <span class="knob-face">
+                    <span class="knob-ring"></span>
+                    <span class="knob-title">PA</span>
+                    <span class="knob-sub">प</span>
+                  </span>
+                </button>
+              </div>
+
+              <!-- Stop 7: Drone Ma (Fourth) -->
+              <div class="pull-stop-unit" data-stop="droneMa">
+                <button id="stop-drone-ma" class="brass-stop-knob small-knob" type="button" aria-pressed="false" title="Continuous Fourth Drone Stop: Shuddha Ma (F)">
+                  <span class="knob-rod"></span>
+                  <span class="knob-face">
+                    <span class="knob-ring"></span>
+                    <span class="knob-title">MA</span>
+                    <span class="knob-sub">म</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Crimson Velvet Acoustic Sound Grill (Right Wing) -->
+          <div class="velvet-sound-grill">
+            <div class="grill-lattice"></div>
+          </div>
+        </div>
+
+        <!-- ==============================================================
+             MICROTONAL KAN-SWAR / MEEND PITCH-BEND RIBBON & OCTAVE PAN BAR
+             ============================================================== -->
+        <div id="expression-ribbon-bar">
+          <!-- Horizontal Saptak Scroll / Viewport Lock Controls -->
+          <div class="keyboard-nav-controls">
+            <button id="btn-scroll-mandra" class="saptak-jump-btn" type="button" title="Focus Mandra Saptak (Lower Octave)">MANDRA (C3)</button>
+            <button id="btn-scroll-madhya" class="saptak-jump-btn active" type="button" title="Focus Madhya Saptak (Middle Octave)">MADHYA (C4)</button>
+            <button id="btn-scroll-taar" class="saptak-jump-btn" type="button" title="Focus Taar Saptak (Upper Octave)">TAAR (C5)</button>
+            <button id="btn-lock-scroll" class="saptak-jump-btn lock-btn locked" type="button" aria-pressed="true" title="Lock Keyboard Scroll for Glissando (Meend)">
+              &#128274; GLISSANDO LOCKED
+            </button>
+          </div>
+
+          <!-- Microtonal Meend / Kan-Swar Pitch Bend Touch Ribbon (±100 Cents) -->
+          <div id="meend-touch-strip" class="meend-ribbon" role="slider" aria-label="Microtonal Meend Pitch Bend Ribbon" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0">
+            <div class="meend-center-notch"></div>
+            <div id="meend-thumb-indicator" class="meend-cursor"></div>
+            <span class="meend-caption">&larr; KOMAL MEEND (-100c) &bull; KAN-SWAR RIBBON &bull; TIVRA MEEND (+100c) &rarr;</span>
+          </div>
+        </div>
+
+        <!-- ==============================================================
+             37-KEY 3-OCTAVE PLAYABLE KEYBOARD (MANDRA, MADHYA, TAAR SAPTAK)
+             ============================================================== -->
+        <div id="keyboard-viewport" class="keyboard-scroll-wrapper fit-all-keys">
+          <!-- Red Felt Strip Above Keys (Authentic Harmonium Keybed Cushion) -->
+          <div class="crimson-felt-strip"></div>
+
+          <div id="harmonium-keyboard" class="keys-bed" role="group" aria-label="37-Key Harmonium Keyboard">
+
+            <!-- OCTAVE 1: MANDRA SAPTAK (LOWER OCTAVE: C3 TO B3, MIDI 48-59) -->
+            <div class="key white-key" data-midi="48" data-note="C3" data-freq="130.81" data-saptak="mandra" data-swara-index="0" data-sargam="सा़" data-sargam-roman="S&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="saptak-tag">MANDRA</span>
+                <span class="label-sargam">सा़</span>
+                <span class="label-western">C3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="49" data-note="C#3" data-freq="138.59" data-saptak="mandra" data-swara-index="1" data-sargam="रे़&#818;" data-sargam-roman="r&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>रे</u>़</span>
+                <span class="label-western">C#3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="50" data-note="D3" data-freq="146.83" data-saptak="mandra" data-swara-index="2" data-sargam="रे़" data-sargam-roman="R&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">रे़</span>
+                <span class="label-western">D3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="51" data-note="D#3" data-freq="155.56" data-saptak="mandra" data-swara-index="3" data-sargam="ग़&#818;" data-sargam-roman="g&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>ग</u>़</span>
+                <span class="label-western">D#3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="52" data-note="E3" data-freq="164.81" data-saptak="mandra" data-swara-index="4" data-sargam="ग़" data-sargam-roman="G&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">ग़</span>
+                <span class="label-western">E3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="53" data-note="F3" data-freq="174.61" data-saptak="mandra" data-swara-index="5" data-sargam="म़" data-sargam-roman="M&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">म़</span>
+                <span class="label-western">F3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="54" data-note="F#3" data-freq="185.00" data-saptak="mandra" data-swara-index="6" data-sargam="म़&#769;" data-sargam-roman="m&#803;&#770;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">म़&#769;</span>
+                <span class="label-western">F#3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="55" data-note="G3" data-freq="196.00" data-saptak="mandra" data-swara-index="7" data-sargam="प़" data-sargam-roman="P&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">प़</span>
+                <span class="label-western">G3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="56" data-note="G#3" data-freq="207.65" data-saptak="mandra" data-swara-index="8" data-sargam="ध़&#818;" data-sargam-roman="d&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>ध</u>़</span>
+                <span class="label-western">G#3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="57" data-note="A3" data-freq="220.00" data-saptak="mandra" data-swara-index="9" data-sargam="ध़" data-sargam-roman="D&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">ध़</span>
+                <span class="label-western">A3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="58" data-note="A#3" data-freq="233.08" data-saptak="mandra" data-swara-index="10" data-sargam="नि़&#818;" data-sargam-roman="n&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>नि</u>़</span>
+                <span class="label-western">A#3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="59" data-note="B3" data-freq="246.94" data-saptak="mandra" data-swara-index="11" data-sargam="नि़" data-sargam-roman="N&#803;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">नि़</span>
+                <span class="label-western">B3</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <!-- OCTAVE 2: MADHYA SAPTAK (MIDDLE OCTAVE: C4 TO B4, MIDI 60-71) -->
+            <div class="key white-key tonic-sa" data-midi="60" data-note="C4" data-freq="261.63" data-saptak="madhya" data-swara-index="0" data-sargam="सा" data-sargam-roman="S">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="saptak-tag">MADHYA</span>
+                <span class="label-sargam">सा</span>
+                <span class="label-western">C4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="61" data-note="C#4" data-freq="277.18" data-saptak="madhya" data-swara-index="1" data-sargam="रे&#818;" data-sargam-roman="r">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>रे</u></span>
+                <span class="label-western">C#4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="62" data-note="D4" data-freq="293.66" data-saptak="madhya" data-swara-index="2" data-sargam="रे" data-sargam-roman="R">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">रे</span>
+                <span class="label-western">D4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="63" data-note="D#4" data-freq="311.13" data-saptak="madhya" data-swara-index="3" data-sargam="ग&#818;" data-sargam-roman="g">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>ग</u></span>
+                <span class="label-western">D#4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="64" data-note="E4" data-freq="329.63" data-saptak="madhya" data-swara-index="4" data-sargam="ग" data-sargam-roman="G">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">ग</span>
+                <span class="label-western">E4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="65" data-note="F4" data-freq="349.23" data-saptak="madhya" data-swara-index="5" data-sargam="म" data-sargam-roman="M">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">म</span>
+                <span class="label-western">F4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="66" data-note="F#4" data-freq="369.99" data-saptak="madhya" data-swara-index="6" data-sargam="म&#769;" data-sargam-roman="m&#770;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">म&#769;</span>
+                <span class="label-western">F#4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="67" data-note="G4" data-freq="392.00" data-saptak="madhya" data-swara-index="7" data-sargam="प" data-sargam-roman="P">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">प</span>
+                <span class="label-western">G4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="68" data-note="G#4" data-freq="415.30" data-saptak="madhya" data-swara-index="8" data-sargam="ध&#818;" data-sargam-roman="d">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>ध</u></span>
+                <span class="label-western">G#4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="69" data-note="A4" data-freq="440.00" data-saptak="madhya" data-swara-index="9" data-sargam="ध" data-sargam-roman="D">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">ध</span>
+                <span class="label-western">A4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="70" data-note="A#4" data-freq="466.16" data-saptak="madhya" data-swara-index="10" data-sargam="नि&#818;" data-sargam-roman="n">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>नि</u></span>
+                <span class="label-western">A#4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="71" data-note="B4" data-freq="493.88" data-saptak="madhya" data-swara-index="11" data-sargam="नि" data-sargam-roman="N">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">नि</span>
+                <span class="label-western">B4</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <!-- OCTAVE 3: TAAR SAPTAK (UPPER OCTAVE: C5 TO C6, MIDI 72-84) -->
+            <div class="key white-key tonic-sa" data-midi="72" data-note="C5" data-freq="523.25" data-saptak="taar" data-swara-index="0" data-sargam="सां" data-sargam-roman="S'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="saptak-tag">TAAR</span>
+                <span class="label-sargam">सां</span>
+                <span class="label-western">C5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="73" data-note="C#5" data-freq="554.37" data-saptak="taar" data-swara-index="1" data-sargam="रें&#818;" data-sargam-roman="r'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>रें</u></span>
+                <span class="label-western">C#5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="74" data-note="D5" data-freq="587.33" data-saptak="taar" data-swara-index="2" data-sargam="रें" data-sargam-roman="R'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">रें</span>
+                <span class="label-western">D5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="75" data-note="D#5" data-freq="622.25" data-saptak="taar" data-swara-index="3" data-sargam="गं&#818;" data-sargam-roman="g'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>गं</u></span>
+                <span class="label-western">D#5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="76" data-note="E5" data-freq="659.25" data-saptak="taar" data-swara-index="4" data-sargam="गं" data-sargam-roman="G'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">गं</span>
+                <span class="label-western">E5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="77" data-note="F5" data-freq="698.46" data-saptak="taar" data-swara-index="5" data-sargam="मं" data-sargam-roman="M'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">मं</span>
+                <span class="label-western">F5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="78" data-note="F#5" data-freq="739.99" data-saptak="taar" data-swara-index="6" data-sargam="मं&#769;" data-sargam-roman="m'&#770;">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">मं&#769;</span>
+                <span class="label-western">F#5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="79" data-note="G5" data-freq="783.99" data-saptak="taar" data-swara-index="7" data-sargam="पं" data-sargam-roman="P'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">पं</span>
+                <span class="label-western">G5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="80" data-note="G#5" data-freq="830.61" data-saptak="taar" data-swara-index="8" data-sargam="धं&#818;" data-sargam-roman="d'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>धं</u></span>
+                <span class="label-western">G#5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="81" data-note="A5" data-freq="880.00" data-saptak="taar" data-swara-index="9" data-sargam="धं" data-sargam-roman="D'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">धं</span>
+                <span class="label-western">A5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key black-key" data-midi="82" data-note="A#5" data-freq="932.33" data-saptak="taar" data-swara-index="10" data-sargam="निं&#818;" data-sargam-roman="n'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam"><u>निं</u></span>
+                <span class="label-western">A#5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key" data-midi="83" data-note="B5" data-freq="987.77" data-saptak="taar" data-swara-index="11" data-sargam="निं" data-sargam-roman="N'">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="label-sargam">निं</span>
+                <span class="label-western">B5</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+            <div class="key white-key tonic-sa" data-midi="84" data-note="C6" data-freq="1046.50" data-saptak="taar" data-swara-index="0" data-sargam="साँ" data-sargam-roman="S''">
+              <div class="key-top-surface">
+                <span class="tutor-led"></span>
+                <span class="saptak-tag">ATI-TAAR</span>
+                <span class="label-sargam">साँ</span>
+                <span class="label-western">C6</span>
+              </div>
+              <div class="key-front-bevel"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Bottom Carved Burmese Teak Baseboard Molding -->
+        <div class="teak-baseboard">
+          <div class="brass-corner-bracket left"></div>
+          <div class="maker-serial-plate">PALITANA TEAK &amp; TRIPLE BRASS REED CONCERT HARMONIUM &bull; HANDCRAFTED DSP ENGINE</div>
+          <div class="brass-corner-bracket right"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ====================================================================
+       PILLAR 5: ADVANCED PRO-SETTINGS STUDIO MODAL (GEAR ICON OVERLAY)
+       ==================================================================== -->
+  <div id="modal-settings" class="studio-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+    <div class="studio-modal-window">
+      <header class="modal-brass-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">&#9881;</span>
+          <h2 id="settings-modal-title">PRO ACOUSTIC, REED &amp; SENSOR CALIBRATION STUDIO</h2>
+        </div>
+        <div class="modal-header-actions">
+          <button id="btn-reset-settings" class="micro-brass-btn" type="button" title="Restore Factory Palitana Defaults">Reset Defaults</button>
+          <button id="btn-close-settings" class="modal-close-btn" type="button" aria-label="Close Settings">&times;</button>
+        </div>
+      </header>
+
+      <div class="modal-body settings-grid">
+        <!-- SECTION 1: ACOUSTIC & REED TUNING -->
+        <fieldset class="settings-card">
+          <legend>1. Acoustic &amp; Reed Tuning</legend>
+
+          <div class="setting-row">
+            <label for="select-tuning-system">Tuning Intonation System</label>
+            <select id="select-tuning-system" class="brass-select">
+              <option value="22shruti" selected>Pure Indian 22-Shruti (Just Intonation to Sa)</option>
+              <option value="12tet">12-TET (Western Equal Temperament)</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-concert-pitch">Master Concert Pitch (A4 Reference)</label>
+              <output id="out-concert-pitch" for="slider-concert-pitch">440 Hz</output>
+            </div>
+            <input id="slider-concert-pitch" type="range" min="432" max="444" step="0.5" value="440" />
+            <div class="preset-pills">
+              <button type="button" class="pitch-preset-btn" data-pitch="432">432 Hz (Vedic)</button>
+              <button type="button" class="pitch-preset-btn active" data-pitch="440">440 Hz (Standard)</button>
+              <button type="button" class="pitch-preset-btn" data-pitch="442">442 Hz (Orchestral)</button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-modal-transpose">Scale Changer Transpose (Komal/Kali Shift)</label>
+              <output id="out-modal-transpose" for="slider-modal-transpose">0 (Safed 1 / C)</output>
+            </div>
+            <input id="slider-modal-transpose" type="range" min="-4" max="4" step="1" value="0" />
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-reed-detune">Female Reed Chorus / Beating Width</label>
+              <output id="out-reed-detune" for="slider-reed-detune">+3.5 cents</output>
+            </div>
+            <input id="slider-reed-detune" type="range" min="0" max="10" step="0.5" value="3.5" />
+          </div>
+
+          <div class="setting-row">
+            <label for="select-reverb-room">Teak Cabinet Convolution &amp; Room Size</label>
+            <select id="select-reverb-room" class="brass-select">
+              <option value="dry">Dry Recording Studio (Cabinet Only)</option>
+              <option value="room" selected>Warm Burmese Teak Music Room</option>
+              <option value="hall">Classical Darbar Concert Hall</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-mech-noise">Mechanical Key-Clack &amp; Air-Hiss Volume</label>
+              <output id="out-mech-noise" for="slider-mech-noise">60%</output>
+            </div>
+            <input id="slider-mech-noise" type="range" min="0" max="100" step="5" value="60" />
+          </div>
+        </fieldset>
+
+        <!-- SECTION 2: BELLOWS FLUID PHYSICS & SENSOR CALIBRATION -->
+        <fieldset class="settings-card">
+          <legend>2. Bellows Physics &amp; Sensor Calibration</legend>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-bellows-stiffness">Bellows Spring Stiffness / Pump Resistance</label>
+              <output id="out-bellows-stiffness" for="slider-bellows-stiffness">50%</output>
+            </div>
+            <input id="slider-bellows-stiffness" type="range" min="10" max="100" step="5" value="50" />
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-air-leak">Air Consumption &amp; Reservoir Leak Speed</label>
+              <output id="out-air-leak" for="slider-air-leak">Normal (1.0x)</output>
+            </div>
+            <input id="slider-air-leak" type="range" min="0.4" max="2.0" step="0.1" value="1.0" />
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-mic-sensitivity">Microphone Blow Sensor Sensitivity</label>
+              <output id="out-mic-sensitivity" for="slider-mic-sensitivity">70%</output>
+            </div>
+            <input id="slider-mic-sensitivity" type="range" min="10" max="100" step="5" value="70" />
+          </div>
+
+          <div class="setting-row">
+            <label>Device Tilt Sensor Zero-Point Calibration</label>
+            <div class="sensor-calibrate-box">
+              <span id="tilt-angle-readout">Tilt Angle: 0.0&deg;</span>
+              <button id="btn-calibrate-tilt" class="brass-pill-btn" type="button">Set Current Angle as Neutral</button>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- SECTION 3: VISUAL & KEYBOARD CUSTOMIZATION -->
+        <fieldset class="settings-card">
+          <legend>3. Visual, Key Width &amp; Performance</legend>
+
+          <div class="setting-row">
+            <label for="select-label-mode">Key Cap Notation Labels</label>
+            <select id="select-label-mode" class="brass-select">
+              <option value="both" selected>Dual Labels: Hindi Sargam (सा रे ग) + Western (C D E)</option>
+              <option value="sargam">Indian Sargam Only (सा, रे, ग, म, प, ध, नि)</option>
+              <option value="western">Western Pitch Only (C3 - C6)</option>
+              <option value="blank">Pro Concert Blank Ivory/Ebony Keys</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-label-wrap">
+              <label for="slider-key-zoom">Key Width / Finger Zoom Scale</label>
+              <output id="out-key-zoom" for="slider-key-zoom">Fit All 37 Keys</output>
+            </div>
+            <input id="slider-key-zoom" type="range" min="32" max="76" step="2" value="36" />
+            <small class="setting-hint">Default set to fit all 37 keys on screen without scrolling. Slide right if you want wider keys.</small>
+          </div>
+
+          <div class="setting-row">
+            <label for="select-graphics-mode">Rendering &amp; Frame-Rate Mode</label>
+            <select id="select-graphics-mode" class="brass-select">
+              <option value="high" selected>60fps Ultra-Skeuomorphic 3D + Live Oscilloscope</option>
+              <option value="battery">Battery Saver (Simplified Shadows &amp; Low-Power Canvas)</option>
+            </select>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       PILLAR 6: INTERACTIVE HELP, RAGA ACADEMY & VISUAL TUTOR MODAL ('?')
+       ==================================================================== -->
+  <div id="modal-academy" class="studio-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="academy-modal-title">
+    <div class="studio-modal-window academy-window">
+      <header class="modal-brass-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">&#2384;</span>
+          <h2 id="academy-modal-title">HARMONIUM LEARNING ACADEMY &amp; INTERACTIVE RAGA TUTOR</h2>
+        </div>
+        <button id="btn-close-academy" class="modal-close-btn" type="button" aria-label="Close Academy">&times;</button>
+      </header>
+
+      <!-- Tab Navigation Bar -->
+      <nav class="academy-tabs" role="tablist">
+        <button class="academy-tab-btn active" role="tab" aria-selected="true" data-tab="tab-tour" type="button">
+          1. Interactive Instrument Tour
+        </button>
+        <button class="academy-tab-btn" role="tab" aria-selected="false" data-tab="tab-ragas" type="button">
+          2. Raga &amp; Alankar Visual Tutor
+        </button>
+        <button class="academy-tab-btn" role="tab" aria-selected="false" data-tab="tab-techniques" type="button">
+          3. Pro Playing Techniques &amp; FAQ
+        </button>
+      </nav>
+
+      <div class="modal-body academy-content">
+
+        <!-- TAB 1: INTERACTIVE INSTRUMENT TOUR -->
+        <section id="tab-tour" class="academy-tab-panel active" role="tabpanel">
+          <div class="tour-diagram-grid">
+            <article class="tour-card">
+              <div class="tour-badge">1. DHAMAN (BELLOWS &amp; AIR RESERVOIR)</div>
+              <h3>Why No Sound Plays Without Pumping</h3>
+              <p>An authentic Indian harmonium is a free-reed aerophone. Holding keys opens air valves underneath the keybed, but <strong>no sound is produced unless the internal reservoir is pressurized</strong>.</p>
+              <p>Use your <strong>left thumb</strong> to drag/pump the wooden paddle on the left, enable <strong>Mic Blow</strong> to breathe into your phone, use <strong>Tilt Rock</strong>, or toggle <strong>Auto-Pump</strong> when practicing two-handed exercises.</p>
+            </article>
+
+            <article class="tour-card">
+              <div class="tour-badge">2. TRIPLE BRASS REED STOPS (KALI / SAFED)</div>
+              <h3>Bass (Kharaj), Male (Nar) &amp; Female (Mada)</h3>
+              <p>Pulling out the large brass knobs opens air channels into three distinct banks of brass reeds inside the Burmese teak soundboard:</p>
+              <ul>
+                <li><strong>BASS (16ft):</strong> Sub-octave reed giving deep Palitana cathedral resonance.</li>
+                <li><strong>MALE (8ft):</strong> Primary fundamental concert pitch with rich nasal warmth.</li>
+                <li><strong>FEMALE (8ft +3.5c):</strong> Slightly detuned unison reed creating the signature shimmering Kolkata acoustic chorus.</li>
+                <li><strong>TREMOLO:</strong> Engages a spinning air baffle for expressive vibrato.</li>
+              </ul>
+            </article>
+
+            <article class="tour-card">
+              <div class="tour-badge">3. JOD (MECHANICAL OCTAVE COUPLER)</div>
+              <h3>Automatic Upper-Octave Doubling</h3>
+              <p>When the <strong>COUPLER (JOD)</strong> switch is active, pressing any key physically pulls down the key exactly 12 semitones (one octave) higher, doubling the richness of every note.</p>
+            </article>
+
+            <article class="tour-card">
+              <div class="tour-badge">4. SCALE CHANGER &amp; SURPETI DRONES</div>
+              <h3>Instant Vocalist Pitch Matching</h3>
+              <p>Slide the <strong>Scale Changer</strong> (-4 to +4 semitones) so you can always play using familiar <em>Safed 1 (C)</em> fingerings while shifting the acoustic pitch to Kali 1 (C#), Kali 2 (D#), or any vocalist's tonic. Pull the <strong>SA, PA, or MA</strong> small knobs for continuous background drone reeds.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- TAB 2: RAGA & ALANKAR PRACTICE GUIDE WITH LIVE KEY-HIGHLIGHT TUTOR -->
+        <section id="tab-ragas" class="academy-tab-panel hidden" role="tabpanel">
+          <div class="tutor-selector-layout">
+            <div class="lesson-library-list">
+              <h3 class="library-group-heading">Beginner Sargam Alankars (1&ndash;5)</h3>
+              <button class="lesson-item-btn active" type="button" data-lesson="alankar1">
+                <strong>Alankar 1: Shuddha Swara Ascent</strong>
+                <span>S R G M P D N S'</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="alankar2">
+                <strong>Alankar 2: Twin-Swara Pulse</strong>
+                <span>SS RR GG MM PP DD NN S'S'</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="alankar3">
+                <strong>Alankar 3: Three-Note Pyramid (Triplets)</strong>
+                <span>SRG, RGM, GMP, MPD, PDN, DNS'</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="alankar4">
+                <strong>Alankar 4: Four-Note Chatushra Pattern</strong>
+                <span>SRGM, RGMP, GMPD, MPDN, PDNS'</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="alankar5">
+                <strong>Alankar 5: Skipping Thirds (Meend Jump)</strong>
+                <span>SG, RM, GP, MD, PN, DS'</span>
+              </button>
+
+              <h3 class="library-group-heading">6 Classical Concert Ragas</h3>
+              <button class="lesson-item-btn" type="button" data-lesson="yaman">
+                <strong>Raga Yaman (Kalyan Thaat)</strong>
+                <span>Evening &bull; Tivra Ma (M&#770;) &bull; Serene &amp; Devotional</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="bhupali">
+                <strong>Raga Bhupali (Audav Pentatonic)</strong>
+                <span>Evening &bull; S R G P D S' (Omits Ma &amp; Ni)</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="bhairav">
+                <strong>Raga Bhairav (Morning Sandhiprakash)</strong>
+                <span>Dawn &bull; Komal Re (r) &amp; Komal Dha (d)</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="desh">
+                <strong>Raga Desh (Khamaj Thaat)</strong>
+                <span>Monsoon / Patriotic &bull; Both Ni (N &amp; n)</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="shivranjani">
+                <strong>Raga Shivranjani (Komal Ga Pentatonic)</strong>
+                <span>Late Night &bull; S R g P D S' &bull; Pathos</span>
+              </button>
+              <button class="lesson-item-btn" type="button" data-lesson="darbari">
+                <strong>Raga Darbari Kanada (Asavari Thaat)</strong>
+                <span>Midnight &bull; Komal g, d, n &bull; Majestic Gamak</span>
+              </button>
+            </div>
+
+            <div class="lesson-detail-card" id="lesson-detail-view">
+              <div class="lesson-header-row">
+                <div>
+                  <span id="detail-category-badge" class="tour-badge">BEGINNER ALANKAR EXERCISE</span>
+                  <h3 id="detail-title">Alankar 1: Shuddha Swara Ascent (Bilawal Scale)</h3>
+                </div>
+                <span id="detail-time-mood" class="mood-pill">Foundation Finger Independence</span>
+              </div>
+
+              <p id="detail-description" class="lesson-desc">
+                The foundational seven-note scale (Saptak) using all natural (Shuddha) white keys from Madhya Sa (C4) to Taar Sa (C5). Practice with smooth bellows pressure so every swara sings at equal volume.
+              </p>
+
+              <div class="raga-grammar-box">
+                <div class="grammar-row">
+                  <span class="grammar-label">AROHA (Ascending):</span>
+                  <code id="detail-aroha">सा रे ग म प ध नि सां  (C4 D4 E4 F4 G4 A4 B4 C5)</code>
+                </div>
+                <div class="grammar-row">
+                  <span class="grammar-label">AVAROHA (Descending):</span>
+                  <code id="detail-avaroha">सां नि ध प म ग रे सा  (C5 B4 A4 G4 F4 E4 D4 C4)</code>
+                </div>
+                <div class="grammar-row">
+                  <span class="grammar-label">PAKAD (Signature Phrase):</span>
+                  <code id="detail-pakad">सा रे ग म प, म ग रे सा</code>
+                </div>
+                <div class="grammar-row">
+                  <span class="grammar-label">VADI / SAMVADI:</span>
+                  <code id="detail-vadi">Vadi: Dha (A4) &bull; Samvadi: Ga (E4)</code>
+                </div>
+              </div>
+
+              <div class="lesson-action-bar">
+                <button id="btn-launch-highlight" class="brass-cta-btn" type="button">
+                  <span class="btn-rivet left"></span>
+                  <span>&#10024; HIGHLIGHT KEYS ON KEYBOARD &amp; START TUTOR</span>
+                  <span class="btn-rivet right"></span>
+                </button>
+                <button id="btn-modal-autoplay" class="brass-cta-btn secondary" type="button">
+                  <span class="btn-rivet left"></span>
+                  <span>&#9654; AUTO-PLAY CONCERT DEMO</span>
+                  <span class="btn-rivet right"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: PRO PLAYING TECHNIQUES & TROUBLESHOOTING -->
+        <section id="tab-techniques" class="academy-tab-panel hidden" role="tabpanel">
+          <div class="tour-diagram-grid">
+            <article class="tour-card">
+              <div class="tour-badge">TECHNIQUE 1: BELLOWS BREATHING (SWAS-PRASWAS)</div>
+              <h3>Expressive Dynamics &amp; Avoiding Pitch Sag</h3>
+              <p>Watch the <strong>PSI Air Gauge</strong> in the top HUD. Pumping harder swells volume and opens the acoustic low-pass filter from 400Hz up to 4500Hz, making the brass reeds shimmer. Letting pressure fall near 0% causes notes to organically starve and sag in pitch—just like a real acoustic bellows running out of air.</p>
+            </article>
+
+            <article class="tour-card">
+              <div class="tour-badge">TECHNIQUE 2: MEEND, GAMAK &amp; KAN-SWAR</div>
+              <h3>Glissando &amp; Microtonal Pitch Bending</h3>
+              <p>Keep <strong>GLISSANDO LOCKED</strong> enabled above the keys and slide your right-hand fingers smoothly across adjacent keys for rapid classical <em>Taans</em>. To bend a note microtonally (&plusmn;100 cents) for <em>Meend</em>, slide your finger vertically up/down on any held key or drag across the <strong>Kan-Swar Ribbon</strong>.</p>
+            </article>
+
+            <article class="tour-card">
+              <div class="tour-badge">TECHNIQUE 3: DESKTOP KEYBOARD SHORTCUTS</div>
+              <h3>Play on Laptop or External Keyboard</h3>
+              <p>If testing on a computer: press <strong>Spacebar</strong> repeatedly to pump the bellows, use <strong>Z&ndash;M</strong> for Mandra Saptak, <strong>A&ndash;L / Q&ndash;P</strong> for Madhya &amp; Taar Saptak, and <strong>Shift</strong> to toggle Auto-Pump.</p>
+            </article>
+
+            <article class="tour-card">
+              <div class="tour-badge">TROUBLESHOOTING &amp; MOBILE AUDIO TIPS</div>
+              <h3>Silent Notes or Sensor Permissions</h3>
+              <ul>
+                <li><strong>No sound when pressing keys?</strong> Check the Air Reservoir gauge! Either pump the left bellows paddle or click <strong>AUTO-PUMP</strong>.</li>
+                <li><strong>Mic Blow not responding?</strong> Ensure you run via HTTPS or localhost and grant microphone permission when prompted.</li>
+                <li><strong>Audio crackle on older phones?</strong> Open Settings (&gear;) and switch Rendering Mode to <strong>Battery Saver</strong>.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic & Web Audio DSP Synthesizer -->
+  <script src="./script.js"></script>
+</body>
+</html>

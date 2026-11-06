@@ -1,0 +1,2210 @@
+/* ==========================================================================
+   PALITANA & KOLKATA CONCERT HARMONIUM STUDIO — MASTER STYLESHEET (style.css)
+   Hyper-Realistic Skeuomorphic 3D Burmese Teak, Brass, Velvet & Ivory UI
+   Hardware-Accelerated Mobile Landscape Workstation
+   ========================================================================== */
+
+:root {
+  /* Burmese Teak & Rosewood Palette */
+  --teak-darkest: #140802;
+  --teak-deep: #241005;
+  --teak-mid: #3e1c0a;
+  --teak-warm: #5c280e;
+  --teak-highlight: #803a15;
+  --teak-border: #2a1205;
+
+  /* Vintage Polished & Aged Brass Palette */
+  --brass-dark: #5e4312;
+  --brass-mid: #9c7323;
+  --brass-bright: #d9aa43;
+  --brass-specular: #fff1b8;
+  --brass-gradient: linear-gradient(135deg, #6e5016 0%, #c79838 28%, #fff0b3 50%, #b58629 72%, #593e0e 100%);
+  --brass-rod-gradient: linear-gradient(90deg, #3b2a0a 0%, #c99c3e 40%, #fff2ba 55%, #755315 100%);
+  --brass-plate-bg: linear-gradient(180deg, #332208 0%, #1c1204 100%);
+
+  /* Crimson Soundboard Velvet & Felt */
+  --velvet-deep: #3b040c;
+  --velvet-crimson: #6e0a19;
+  --velvet-bright: #9c1428;
+
+  /* Ivory & Ebony Key Materials */
+  --ivory-top: #fcf9f0;
+  --ivory-mid: #f2ebd9;
+  --ivory-aged: #e0d5bc;
+  --ivory-front: #cbbca0;
+  --ebony-top: #262423;
+  --ebony-mid: #141312;
+  --ebony-deep: #070606;
+
+  /* LED & Telemetry Accents */
+  --led-off: #2c1e16;
+  --led-green: #2dff7a;
+  --led-amber: #ffba26;
+  --led-red: #ff334b;
+  --scope-glow: #3bff9d;
+
+  /* Dynamic Key Sizing — Defaulted to Fit All 37 Keys on Screen Without Scrolling */
+  --white-key-width: calc((100% - 22px) / 22);
+  --black-key-width: 2.75%;
+  --white-key-height: 100%;
+  --black-key-height: 58%;
+
+  /* Typography */
+  --font-display: 'Georgia', 'Times New Roman', serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
+}
+
+/* ==========================================================================
+   1. GLOBAL RESET, TOUCH LOCK & MOBILE VIEWPORT ENFORCEMENT
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--teak-darkest);
+  font-family: var(--font-ui);
+  color: #f7ebd4;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+button, input, select {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   2. PORTRAIT ORIENTATION BLOCKER DISABLED & AUTO-LANDSCAPE ENFORCER
+   ========================================================================== */
+#orientation-overlay {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Automatic Landscape View even when phone is held vertically (Portrait) */
+@media screen and (orientation: portrait) {
+  #harmonium-workstation,
+  #audio-unlock-banner,
+  .studio-modal-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 100vw !important;
+    width: 100vh !important;
+    width: 100dvh !important;
+    height: 100vw !important;
+    transform-origin: top left !important;
+    transform: rotate(90deg) !important;
+  }
+}
+
+.orientation-card,
+.unlock-plaque {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+  padding: 28px 32px;
+  background:
+    linear-gradient(180deg, rgba(62, 28, 10, 0.96) 0%, rgba(28, 12, 4, 0.98) 100%);
+  border: 3px solid var(--brass-mid);
+  border-radius: 12px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.85),
+    inset 0 0 0 2px rgba(255, 241, 184, 0.25),
+    inset 0 8px 24px rgba(0, 0, 0, 0.65);
+  text-align: center;
+}
+
+.phone-rotate-icon {
+  margin: 0 auto 16px;
+  width: 68px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phone-outline {
+  width: 38px;
+  height: 64px;
+  border: 3px solid var(--brass-bright);
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: rotatePhoneAnim 2.4s ease-in-out infinite;
+}
+
+.phone-notch {
+  position: absolute;
+  top: 4px;
+  width: 14px;
+  height: 3px;
+  background: var(--brass-bright);
+  border-radius: 2px;
+}
+
+.phone-screen-arrows {
+  font-size: 22px;
+  color: var(--brass-specular);
+}
+
+@keyframes rotatePhoneAnim {
+  0%, 20% { transform: rotate(0deg); }
+  55%, 80% { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.orientation-card h2,
+.unlock-plaque h1 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: 1.5px;
+  color: var(--brass-specular);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  margin-bottom: 10px;
+}
+
+.orientation-card p,
+.unlock-plaque .plaque-desc {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #e6d3b3;
+  margin-bottom: 12px;
+}
+
+.orientation-sub {
+  font-size: 0.8rem !important;
+  color: var(--brass-bright) !important;
+  margin-bottom: 18px !important;
+}
+
+/* First-Tap Audio Unlock Overlay */
+.audio-unlock-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  background: radial-gradient(circle at center, rgba(36, 16, 5, 0.82) 0%, rgba(12, 5, 1, 0.95) 100%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.plaque-maker {
+  font-size: 0.7rem;
+  letter-spacing: 2.5px;
+  color: var(--brass-bright);
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.plaque-screw {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--brass-gradient);
+  border: 1px solid #2b1a04;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.plaque-screw::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 1px;
+  right: 1px;
+  height: 1.5px;
+  background: #3b2406;
+  transform: rotate(35deg);
+}
+
+.plaque-screw.tl { top: 10px; left: 10px; }
+.plaque-screw.tr { top: 10px; right: 10px; }
+.plaque-screw.bl { bottom: 10px; left: 10px; }
+.plaque-screw.br { bottom: 10px; right: 10px; }
+
+/* Reusable Brass CTA Button */
+.brass-cta-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 22px;
+  background: var(--brass-gradient);
+  color: #1f1102;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border: 1px solid #fff2ba;
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.7),
+    inset 0 1px 2px rgba(255, 255, 255, 0.85),
+    inset 0 -2px 4px rgba(94, 67, 18, 0.8);
+  transition: transform 0.1s ease, filter 0.15s ease;
+}
+
+.brass-cta-btn.large {
+  padding: 14px 28px;
+  font-size: 0.92rem;
+  margin-top: 8px;
+}
+
+.brass-cta-btn.secondary {
+  background: linear-gradient(135deg, #3b2610 0%, #613f19 50%, #2b1a09 100%);
+  color: var(--brass-specular);
+  border-color: var(--brass-mid);
+}
+
+.brass-cta-btn:active {
+  transform: translateY(2px) scale(0.985);
+  filter: brightness(0.92);
+}
+
+.btn-rivet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b2606;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* ==========================================================================
+   3. WORKSTATION MASTER FLEX LAYOUT
+   ========================================================================== */
+#harmonium-workstation {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at 50% 20%, #4d220c 0%, #1c0b03 75%, #0f0501 100%);
+  border: 4px solid #301507;
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   4. TOP VINTAGE BRASS HUD, OSCILLOSCOPE & RECORDER BAR
+   ========================================================================== */
+#studio-hud-bar {
+  height: 52px;
+  min-height: 52px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 4px 8px;
+  background:
+    linear-gradient(180deg, #2d1406 0%, #180a02 55%, #110601 100%);
+  border-bottom: 2px solid var(--brass-mid);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 235, 168, 0.25);
+  z-index: 30;
+}
+
+.hud-module {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 42px;
+  padding: 3px 8px;
+  background: rgba(12, 5, 1, 0.65);
+  border: 1px solid rgba(199, 152, 56, 0.35);
+  border-radius: 6px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.85);
+}
+
+/* Module 1: Maker Emblem */
+.brass-emblem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.emblem-om {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brass-gradient);
+  color: #1f0d02;
+  font-weight: 900;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.emblem-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.emblem-title {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--brass-specular);
+}
+
+.emblem-sub {
+  font-size: 0.58rem;
+  color: var(--brass-bright);
+  font-family: var(--font-mono);
+}
+
+/* Module 2: Analog PSI Air Reservoir Gauge */
+.hud-pressure-gauge {
+  min-width: 155px;
+}
+
+.gauge-dial {
+  position: relative;
+  width: 46px;
+  height: 28px;
+  border-radius: 26px 26px 4px 4px;
+  background: radial-gradient(circle at 50% 90%, #fdf5dc 0%, #cfb682 75%, #876930 100%);
+  border: 2px solid var(--brass-mid);
+  overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+}
+
+.gauge-scale {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: 0.42rem;
+  font-weight: 800;
+  color: #291604;
+}
+
+.gauge-scale .tick {
+  position: absolute;
+}
+.gauge-scale .tick.low { bottom: 2px; left: 4px; color: #9c1428; }
+.gauge-scale .tick.mid { top: 2px; left: 50%; transform: translateX(-50%); }
+.gauge-scale .tick.high { bottom: 2px; right: 3px; color: #195e2a; }
+
+.gauge-needle {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 2px;
+  height: 20px;
+  background: #b8111f;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(-75deg);
+  transition: transform 0.05s linear;
+  will-change: transform;
+}
+
+.gauge-cap {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2b1704;
+  border: 1px solid var(--brass-bright);
+}
+
+.gauge-readout {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.hud-label {
+  font-size: 0.52rem;
+  letter-spacing: 0.8px;
+  color: #bfa57a;
+  font-weight: 700;
+}
+
+.pressure-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #140802;
+  border-radius: 3px;
+  border: 1px solid rgba(217, 170, 67, 0.35);
+  overflow: hidden;
+}
+
+.pressure-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff3b30 0%, #ffcc00 45%, #2dff7a 100%);
+  transition: width 0.05s linear;
+  will-change: width;
+}
+
+.hud-value {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--brass-specular);
+}
+
+/* Module 3: Telemetry & Live Oscilloscope Canvas */
+.hud-telemetry {
+  flex: 1;
+  max-width: 310px;
+  justify-content: space-between;
+}
+
+.telemetry-notes {
+  display: flex;
+  gap: 8px;
+}
+
+.note-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 58px;
+}
+
+.swara-display {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--brass-specular);
+  text-shadow: 0 0 8px rgba(255, 200, 80, 0.5);
+  white-space: nowrap;
+}
+
+.freq-display {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--scope-glow);
+  white-space: nowrap;
+}
+
+.oscilloscope-frame {
+  position: relative;
+  width: 130px;
+  height: 34px;
+  background: #05120a;
+  border: 1px solid #2b5c3f;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+  flex-shrink: 0;
+}
+
+#hud-oscilloscope {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scope-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(59, 255, 157, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 255, 157, 0.12) 1px, transparent 1px);
+  background-size: 13px 8.5px;
+  pointer-events: none;
+}
+
+/* Module 4: Tanpura & Tabla Accompaniment */
+.accomp-group {
+  display: flex;
+  gap: 4px;
+}
+
+.brass-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  background: linear-gradient(180deg, #3a200d 0%, #1f1005 100%);
+  border: 1px solid var(--brass-mid);
+  border-radius: 5px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #f0dec0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  transition: all 0.12s ease;
+}
+
+.brass-pill-btn[aria-pressed="true"],
+.brass-pill-btn.active {
+  background: linear-gradient(180deg, #593512 0%, #331c07 100%);
+  border-color: var(--brass-specular);
+  color: var(--brass-specular);
+  box-shadow: 0 0 8px rgba(217, 170, 67, 0.45);
+}
+
+.led-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--led-off);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.brass-pill-btn[aria-pressed="true"] .led-dot,
+.pump-mode-btn[aria-pressed="true"] .led-dot,
+.led-dot.active {
+  background: var(--led-green);
+  box-shadow: 0 0 8px var(--led-green), inset 0 0 2px #ffffff;
+}
+
+.tempo-spinner {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #0d0501;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(156, 115, 35, 0.4);
+}
+
+.micro-brass-btn {
+  padding: 3px 7px;
+  background: var(--brass-gradient);
+  color: #1c0d02;
+  font-weight: 800;
+  font-size: 0.68rem;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.micro-brass-btn:active {
+  transform: scale(0.94);
+}
+
+.bpm-readout {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--brass-specular);
+  padding: 0 3px;
+  white-space: nowrap;
+}
+
+.bpm-readout small {
+  font-size: 0.5rem;
+  color: var(--brass-bright);
+}
+
+/* Module 5: Live Studio Recorder */
+.hud-recorder {
+  gap: 5px;
+}
+
+.recorder-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  background: #2b1408;
+  border: 1px solid var(--brass-mid);
+  color: #f5e6cc;
+  text-decoration: none;
+}
+
+.recorder-btn:disabled,
+.recorder-btn.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.recorder-btn.rec-arm[aria-pressed="true"] {
+  background: #5e0814;
+  border-color: var(--led-red);
+  color: #ffffff;
+  animation: recPulse 1.1s infinite ease-in-out;
+}
+
+.rec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--led-red);
+  box-shadow: 0 0 6px var(--led-red);
+}
+
+@keyframes recPulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(255, 51, 75, 0.4); }
+  50% { box-shadow: 0 0 14px rgba(255, 51, 75, 0.95); }
+}
+
+.rec-timer {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--led-amber);
+  min-width: 36px;
+  text-align: center;
+}
+
+/* Module 6: Academy, Settings & Fullscreen Buttons */
+.hud-actions {
+  gap: 4px;
+}
+
+.hud-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 34px;
+  background: linear-gradient(180deg, #3d200b 0%, #1c0d03 100%);
+  border: 1px solid var(--brass-mid);
+  border-radius: 5px;
+  color: var(--brass-specular);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.65);
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+
+.hud-icon-btn:active {
+  transform: translateY(1px) scale(0.95);
+  border-color: var(--brass-specular);
+}
+
+.icon-glyph {
+  font-size: 0.85rem;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.icon-caption {
+  font-size: 0.44rem;
+  letter-spacing: 0.4px;
+  color: #d9c398;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   5. ACTIVE RAGA / ALANKAR TUTOR GUIDANCE BANNER
+   ========================================================================== */
+.tutor-strip {
+  height: 30px;
+  min-height: 30px;
+  width: 100%;
+  background: linear-gradient(90deg, #2b0f04 0%, #4a1c08 50%, #2b0f04 100%);
+  border-bottom: 1px solid var(--brass-bright);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 0.72rem;
+  z-index: 25;
+}
+
+.tutor-strip-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tutor-badge {
+  background: var(--brass-gradient);
+  color: #1a0b02;
+  font-weight: 900;
+  font-size: 0.58rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.6px;
+}
+
+.tutor-formula {
+  font-family: var(--font-mono);
+  color: var(--brass-specular);
+  font-size: 0.68rem;
+}
+
+.tutor-strip-steps {
+  background: rgba(0, 0, 0, 0.55);
+  padding: 2px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 241, 184, 0.35);
+}
+
+.tutor-prompt strong {
+  color: var(--led-green);
+  font-size: 0.78rem;
+}
+
+.tutor-strip-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.tutor-btn.danger {
+  background: linear-gradient(180deg, #8a1527 0%, #4d0812 100%);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   6. MAIN INSTRUMENT STAGE (LEFT BELLOWS + RIGHT CABINET)
+   ========================================================================== */
+#instrument-stage {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ==========================================================================
+   7. LEFT COLUMN: REAL-TIME BELLOWS FLUID PHYSICS ASSEMBLY
+   ========================================================================== */
+#bellows-assembly {
+  width: 152px;
+  min-width: 142px;
+  max-width: 165px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+  background:
+    linear-gradient(90deg, #1b0b03 0%, #2f1407 50%, #1a0a02 100%);
+  border-right: 4px solid #0e0501;
+  box-shadow:
+    inset -3px 0 8px rgba(0, 0, 0, 0.85),
+    4px 0 14px rgba(0, 0, 0, 0.75);
+  position: relative;
+  z-index: 15;
+}
+
+.teak-frame-corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--brass-gradient);
+  pointer-events: none;
+  z-index: 2;
+}
+.teak-frame-corner.tl { top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.teak-frame-corner.tr { top: 0; right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.teak-frame-corner.bl { bottom: 0; left: 0; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+.teak-frame-corner.br { bottom: 0; right: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+
+.bellows-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--brass-plate-bg);
+  border: 1px solid var(--brass-mid);
+  border-radius: 5px;
+  text-align: center;
+}
+
+.brass-plate-title {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--brass-specular);
+}
+
+.mode-tag {
+  font-size: 0.54rem;
+  font-family: var(--font-mono);
+  color: var(--led-amber);
+  font-weight: 700;
+}
+
+/* Interactive 3D Pleated Leather Bellows Chamber */
+.bellows-chamber {
+  position: relative;
+  flex: 1;
+  margin: 6px 0;
+  background:
+    radial-gradient(circle at center, #2b060c 0%, #120204 100%);
+  border: 3px solid #3d1b0a;
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.95),
+    0 2px 6px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  cursor: grab;
+  perspective: 600px;
+}
+
+.bellows-chamber:active {
+  cursor: grabbing;
+}
+
+.bellows-folds-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 6px 6px 46px 6px;
+  transform-origin: top center;
+  transition: transform 0.04s linear;
+  will-change: transform;
+}
+
+.leather-fold {
+  flex: 1;
+  margin: 2px 0;
+  background:
+    linear-gradient(180deg, #4f0b16 0%, #240308 48%, #6e1120 52%, #1c0206 100%);
+  border-left: 3px solid #c99c3e;
+  border-right: 3px solid #c99c3e;
+  border-radius: 3px;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.85),
+    inset 0 1px 2px rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateX(12deg);
+  transition: transform 0.05s linear, margin 0.05s linear;
+}
+
+.cardboard-rib {
+  width: 88%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(217, 170, 67, 0.2), rgba(255, 241, 184, 0.65), rgba(217, 170, 67, 0.2));
+}
+
+/* Draggable Wooden & Brass Bellows Paddle Handle */
+.bellows-wooden-paddle {
+  position: absolute;
+  bottom: 6px;
+  left: 5px;
+  right: 5px;
+  height: 38px;
+  background:
+    linear-gradient(180deg, #6e3112 0%, #3d1a08 55%, #240e04 100%);
+  border: 2px solid var(--brass-bright);
+  border-radius: 6px;
+  box-shadow:
+    0 -4px 12px rgba(0, 0, 0, 0.85),
+    0 4px 10px rgba(0, 0, 0, 0.9),
+    inset 0 1px 2px rgba(255, 230, 170, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  will-change: transform;
+}
+
+.brass-grip-plate {
+  width: 90%;
+  height: 22px;
+  background: var(--brass-gradient);
+  border-radius: 4px;
+  border: 1px solid #382405;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.grip-engraving {
+  font-size: 0.48rem;
+  font-weight: 900;
+  color: #1f0e02;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* 4 Ways to Pump Mode Selector Buttons */
+.bellows-input-selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pump-mode-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: linear-gradient(180deg, #331809 0%, #190b03 100%);
+  border: 1px solid rgba(199, 152, 56, 0.55);
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #ecd7b4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.65);
+}
+
+.pump-mode-btn[aria-pressed="true"] {
+  background: linear-gradient(180deg, #542a0e 0%, #2b1305 100%);
+  border-color: var(--brass-specular);
+  color: var(--brass-specular);
+}
+
+/* ==========================================================================
+   8. RIGHT COLUMN: BURMESE TEAK CABINET, 7 BRASS STOPS & KEYBOARD
+   ========================================================================== */
+#harmonium-cabinet {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    linear-gradient(180deg, #381808 0%, #210d04 35%, #140802 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Top Control Deck: Velvet Grills + 7 Pull Stops + Scale Changer + Coupler */
+#cabinet-control-panel {
+  height: 86px;
+  min-height: 82px;
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 5px 8px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.14) 0px, rgba(0, 0, 0, 0.14) 2px, transparent 2px, transparent 9px),
+    linear-gradient(180deg, #4f230d 0%, #2c1206 50%, #1c0b03 100%);
+  border-bottom: 3px solid #120601;
+  box-shadow:
+    inset 0 2px 5px rgba(255, 200, 130, 0.18),
+    0 5px 14px rgba(0, 0, 0, 0.85);
+  z-index: 12;
+}
+
+/* Crimson Velvet Sound Grills */
+.velvet-sound-grill {
+  width: 38px;
+  min-width: 28px;
+  background:
+    radial-gradient(circle at center, var(--velvet-bright) 0%, var(--velvet-crimson) 60%, var(--velvet-deep) 100%);
+  border: 2px solid var(--brass-mid);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9);
+}
+
+.grill-lattice {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, transparent 35%, #1f0c04 38%, #3d1a09 55%, transparent 60%);
+  background-size: 14px 14px;
+  opacity: 0.85;
+}
+
+/* Pull-Stop Banks */
+.stops-bank {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3px 8px;
+  background:
+    linear-gradient(180deg, rgba(20, 8, 2, 0.75) 0%, rgba(10, 4, 1, 0.9) 100%);
+  border: 1px solid rgba(217, 170, 67, 0.45);
+  border-radius: 6px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.bank-label {
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  color: var(--brass-bright);
+  text-align: center;
+  border-bottom: 1px solid rgba(217, 170, 67, 0.2);
+  padding-bottom: 2px;
+}
+
+.stops-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+}
+
+/* 3D Mechanical Pull-Stop Knobs */
+.pull-stop-unit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 400px;
+}
+
+.brass-stop-knob {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.brass-stop-knob.small-knob {
+  width: 42px;
+  height: 42px;
+}
+
+/* Exposed Brass Rod Behind Knob when Pulled */
+.knob-rod {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 18px;
+  background: var(--brass-rod-gradient);
+  border-radius: 2px;
+  transform: translate(-50%, -50%) scaleY(0.2);
+  opacity: 0;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.9);
+  z-index: 1;
+}
+
+/* Circular Brass Face with Ivory Center Insert */
+.knob-face {
+  position: relative;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #ffffff 0%, #f5ebd6 42%, #cbb793 65%, #8c6520 68%, #ffd97d 82%, #52380a 100%);
+  border: 2px solid #3b2607;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.85),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease;
+}
+
+.brass-stop-knob.small-knob .knob-face {
+  width: 38px;
+  height: 38px;
+}
+
+.knob-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(140, 101, 32, 0.65);
+  pointer-events: none;
+}
+
+.knob-title {
+  font-family: var(--font-display);
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: #1f0e02;
+  letter-spacing: 0.3px;
+  line-height: 1.05;
+}
+
+.knob-sub {
+  font-size: 0.44rem;
+  font-weight: 800;
+  color: #6e1120;
+  line-height: 1;
+}
+
+/* PULLED STOP STATE (3D Pop-Out + Drop Shadow + Glowing Rim) */
+.brass-stop-knob.pulled .knob-rod,
+.brass-stop-knob[aria-pressed="true"] .knob-rod {
+  transform: translate(-50%, -95%) scaleY(1);
+  opacity: 1;
+}
+
+.brass-stop-knob.pulled .knob-face,
+.brass-stop-knob[aria-pressed="true"] .knob-face {
+  transform: translateY(5px) scale(1.12);
+  border-color: var(--brass-specular);
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.95),
+    0 0 10px rgba(255, 215, 100, 0.55),
+    inset 0 1px 3px rgba(255, 255, 255, 1);
+}
+
+/* Center Mechanics: Scale Changer & Octave Coupler */
+.center-mechanics-module {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(14, 5, 1, 0.8);
+  border: 1px solid rgba(217, 170, 67, 0.45);
+  border-radius: 6px;
+}
+
+.scale-changer-housing {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 132px;
+  gap: 4px;
+}
+
+.scale-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.52rem;
+  color: #d6be94;
+}
+
+.scale-header strong {
+  color: var(--brass-specular);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+}
+
+.scale-notches {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.scale-step-btn {
+  width: 22px;
+  height: 22px;
+  background: var(--brass-gradient);
+  color: #1f0d02;
+  font-weight: 900;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#slider-scale-changer {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: #0d0501;
+  border: 1px solid var(--brass-mid);
+  border-radius: 4px;
+}
+
+#slider-scale-changer::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 22px;
+  background: var(--brass-gradient);
+  border: 1px solid #fff3bd;
+  border-radius: 3px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+}
+
+/* Mechanical Coupler Switch */
+.coupler-housing {
+  display: flex;
+  align-items: center;
+}
+
+.brass-lever-switch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 6px;
+  background: #1b0a03;
+  border: 1px solid var(--brass-mid);
+  border-radius: 5px;
+}
+
+.lever-slot {
+  width: 36px;
+  height: 16px;
+  background: #080301;
+  border: 1px solid #593e0e;
+  border-radius: 8px;
+  position: relative;
+  padding: 2px;
+}
+
+.lever-shaft {
+  display: block;
+  width: 16px;
+  height: 10px;
+  border-radius: 6px;
+  background: var(--brass-gradient);
+  transition: transform 0.16s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.brass-lever-switch[aria-pressed="true"] .lever-shaft,
+.brass-lever-switch.active .lever-shaft {
+  transform: translateX(14px);
+}
+
+.brass-lever-switch[aria-pressed="true"] {
+  border-color: var(--brass-specular);
+  box-shadow: 0 0 8px rgba(217, 170, 67, 0.35);
+}
+
+.lever-caption {
+  font-size: 0.48rem;
+  font-weight: 800;
+  color: var(--brass-specular);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   9. OCTAVE NAVIGATION & MICROTONAL KAN-SWAR / MEEND PITCH RIBBON
+   ========================================================================== */
+#expression-ribbon-bar {
+  height: 30px;
+  min-height: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 8px;
+  background: linear-gradient(180deg, #240f05 0%, #140802 100%);
+  border-bottom: 2px solid #0a0301;
+  z-index: 11;
+}
+
+.keyboard-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.saptak-jump-btn {
+  padding: 3px 8px;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  border-radius: 3px;
+  background: #2b1306;
+  border: 1px solid rgba(199, 152, 56, 0.4);
+  color: #d9c398;
+  white-space: nowrap;
+}
+
+.saptak-jump-btn.active {
+  background: var(--brass-gradient);
+  color: #1a0b02;
+  border-color: var(--brass-specular);
+}
+
+.saptak-jump-btn.lock-btn.locked {
+  background: linear-gradient(180deg, #1b4d2e 0%, #0e2918 100%);
+  border-color: var(--led-green);
+  color: #d4ffe4;
+}
+
+/* Microtonal Pitch-Bend Touch Strip */
+.meend-ribbon {
+  flex: 1;
+  height: 22px;
+  position: relative;
+  background:
+    linear-gradient(90deg, #3b0812 0%, #1c0c04 45%, #3d2a0d 50%, #1c0c04 55%, #3b0812 100%);
+  border: 1px solid var(--brass-mid);
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9);
+  cursor: ew-resize;
+}
+
+.meend-center-notch {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: var(--brass-specular);
+  transform: translateX(-50%);
+}
+
+.meend-cursor {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 50%;
+  width: 18px;
+  border-radius: 8px;
+  background: var(--brass-gradient);
+  border: 1px solid #ffffff;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px var(--brass-bright);
+  pointer-events: none;
+  transition: left 0.04s linear;
+}
+
+.meend-caption {
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: rgba(255, 241, 184, 0.8);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   10. 37-KEY 3-OCTAVE SKEUOMORPHIC KEYBOARD (ALL 37 KEYS FIT ON SCREEN)
+   ========================================================================== */
+.keyboard-scroll-wrapper {
+  flex: 1;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background: #0d0501;
+  perspective: 1200px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.keyboard-scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.keyboard-scroll-wrapper.scroll-locked {
+  overflow-x: hidden;
+}
+
+/* Authentic Crimson Felt Strip Running Along Key Tops */
+.crimson-felt-strip {
+  position: sticky;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 7px;
+  background: linear-gradient(180deg, #4a040d 0%, #8f0d20 50%, #3d030b 100%);
+  border-bottom: 1px solid #240105;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.85);
+  z-index: 8;
+}
+
+.keys-bed {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 100%;
+  height: calc(100% - 7px);
+  padding: 0 4px 6px 4px;
+  transform-style: preserve-3d;
+}
+
+/* Base Key Structure */
+.key {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform-origin: top center;
+  transition: transform 0.045s ease-out, box-shadow 0.045s ease-out;
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* WHITE KEYS (SAFED / IVORY SWARAS) — Auto-Flex so all 22 White Keys Fit 100% */
+.white-key {
+  flex: 1 1 0%;
+  width: var(--white-key-width);
+  min-width: 24px;
+  height: var(--white-key-height);
+  margin-right: 1px;
+  background:
+    linear-gradient(180deg, var(--ivory-top) 0%, var(--ivory-mid) 68%, var(--ivory-aged) 93%, #c9b99b 100%);
+  border-left: 1px solid rgba(255, 255, 255, 0.85);
+  border-right: 1px solid #8c7b60;
+  border-bottom: 1px solid #594b36;
+  border-radius: 0 0 6px 6px;
+  box-shadow:
+    0 7px 0 var(--ivory-front),
+    0 9px 12px rgba(0, 0, 0, 0.85),
+    inset 0 -3px 6px rgba(158, 138, 104, 0.45);
+  z-index: 2;
+  color: #261405;
+}
+
+/* Tonic 'Sa' Keys Subtle Golden Ivory Tint */
+.white-key.tonic-sa {
+  background:
+    linear-gradient(180deg, #fffdf6 0%, #faefd2 68%, #ebd5a7 93%, #cfb37c 100%);
+}
+
+.white-key .key-top-surface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  gap: 2px;
+  position: relative;
+}
+
+.white-key .key-front-bevel {
+  height: 10px;
+  width: 100%;
+  background: linear-gradient(180deg, #dfd2b8 0%, #b3a182 100%);
+  border-radius: 0 0 5px 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+/* BLACK KEYS (KALI / EBONY SWARAS) — Proportional Overlap Across All 3 Octaves */
+.black-key {
+  flex: 0 0 var(--black-key-width);
+  width: var(--black-key-width);
+  min-width: 16px;
+  height: var(--black-key-height);
+  margin-left: calc(var(--black-key-width) * -0.5);
+  margin-right: calc(var(--black-key-width) * -0.5);
+  background:
+    linear-gradient(180deg, #383533 0%, var(--ebony-top) 12%, var(--ebony-mid) 78%, var(--ebony-deep) 100%);
+  border-left: 1px solid rgba(255, 255, 255, 0.22);
+  border-right: 1px solid #050505;
+  border-bottom: 2px solid #000000;
+  border-radius: 0 0 5px 5px;
+  box-shadow:
+    0 6px 0 #0a0908,
+    3px 10px 14px rgba(0, 0, 0, 0.9),
+    inset 0 1px 2px rgba(255, 255, 255, 0.25);
+  z-index: 5;
+  color: var(--brass-specular);
+}
+
+.black-key .key-top-surface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 6px;
+  gap: 1px;
+  position: relative;
+}
+
+.black-key .key-front-bevel {
+  height: 9px;
+  width: 100%;
+  background: linear-gradient(180deg, #2e2b29 0%, #0d0c0b 100%);
+  border-radius: 0 0 4px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* ACTIVE / DEPRESSED KEY STATES (Direct Finger Press + Mechanical Coupler) */
+.white-key.active,
+.white-key.coupled-active {
+  transform: rotateX(-5.5deg) translateY(5px);
+  background:
+    linear-gradient(180deg, #f2e8d5 0%, #e3d3b6 75%, #c9b48f 100%);
+  box-shadow:
+    0 2px 0 #a8987d,
+    0 3px 6px rgba(0, 0, 0, 0.75),
+    inset 0 4px 10px rgba(0, 0, 0, 0.28);
+}
+
+.black-key.active,
+.black-key.coupled-active {
+  transform: rotateX(-6.5deg) translateY(5px);
+  background:
+    linear-gradient(180deg, #1f1d1c 0%, #0d0c0c 85%, #000000 100%);
+  box-shadow:
+    0 2px 0 #050505,
+    1px 4px 7px rgba(0, 0, 0, 0.85),
+    inset 0 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Coupled Octave Visual Indicator */
+.key.coupled-active::after {
+  content: 'JOD';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.38rem;
+  font-weight: 900;
+  padding: 1px 3px;
+  border-radius: 2px;
+  background: var(--brass-gradient);
+  color: #1c0c02;
+}
+
+/* Key Notation Typography & Saptak Tags */
+.saptak-tag {
+  position: absolute;
+  top: 5px;
+  font-size: 0.36rem;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  padding: 1px 2px;
+  border-radius: 2px;
+  background: rgba(92, 40, 14, 0.16);
+  color: #5c280e;
+  white-space: nowrap;
+}
+
+.label-sargam {
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.black-key .label-sargam {
+  font-size: 0.64rem;
+  color: var(--brass-specular);
+}
+
+.label-western {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 700;
+  opacity: 0.78;
+}
+
+/* Dynamic Label Modes (Controlled by Pro Settings Modal) */
+body.label-mode-sargam .label-western {
+  display: none;
+}
+body.label-mode-western .label-sargam {
+  display: none;
+}
+body.label-mode-blank .label-sargam,
+body.label-mode-blank .label-western,
+body.label-mode-blank .saptak-tag {
+  display: none;
+}
+
+/* ==========================================================================
+   11. RAGA ACADEMY TUTOR KEY-HIGHLIGHT LED INDICATORS
+   ========================================================================== */
+.tutor-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  margin-bottom: 2px;
+  transition: all 0.15s ease;
+  pointer-events: none;
+}
+
+/* Allowed Swara in Selected Raga */
+.key.raga-allowed .tutor-led {
+  background: var(--brass-bright);
+  border: 1px solid #fff3bd;
+  box-shadow: 0 0 8px var(--brass-bright);
+}
+
+/* Target Next Swara to Press in Interactive Tutor */
+.key.tutor-next-target .tutor-led {
+  width: 11px;
+  height: 11px;
+  background: var(--led-green);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 14px var(--led-green), 0 0 24px var(--led-green);
+  animation: targetKeyPulse 0.85s infinite alternate;
+}
+
+.white-key.tutor-next-target {
+  background: linear-gradient(180deg, #e8fff0 0%, #b8ffd0 70%, #82f0a9 100%);
+}
+
+.black-key.tutor-next-target {
+  background: linear-gradient(180deg, #1b5e37 0%, #0f3820 80%, #071f11 100%);
+}
+
+@keyframes targetKeyPulse {
+  0% { transform: scale(0.92); }
+  100% { transform: scale(1.22); }
+}
+
+/* ==========================================================================
+   12. BOTTOM CARVED TEAK BASEBOARD MOLDING
+   ========================================================================== */
+.teak-baseboard {
+  height: 20px;
+  min-height: 20px;
+  width: 100%;
+  background:
+    linear-gradient(180deg, #3d1b0a 0%, #210d04 60%, #120601 100%);
+  border-top: 2px solid var(--brass-mid);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  z-index: 12;
+}
+
+.maker-serial-plate {
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: var(--brass-bright);
+  text-align: center;
+  flex: 1;
+}
+
+.brass-corner-bracket {
+  width: 24px;
+  height: 8px;
+  background: var(--brass-gradient);
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   13. PRO-SETTINGS & RAGA ACADEMY MODAL WINDOWS
+   ========================================================================== */
+.studio-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  background: rgba(10, 4, 1, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+}
+
+.studio-modal-window {
+  width: 100%;
+  max-width: 920px;
+  max-height: 92vh;
+  max-height: 92dvh;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(180deg, #2d1407 0%, #190b03 100%);
+  border: 2px solid var(--brass-bright);
+  border-radius: 10px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.95),
+    inset 0 0 0 1px rgba(255, 241, 184, 0.2);
+  overflow: hidden;
+}
+
+.modal-brass-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background:
+    linear-gradient(90deg, #1f0d04 0%, #421d09 50%, #1f0d04 100%);
+  border-bottom: 2px solid var(--brass-mid);
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--brass-gradient);
+  color: #1f0d02;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.9rem;
+}
+
+.modal-brass-header h2 {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: var(--brass-specular);
+}
+
+.modal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-close-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #4a0e17;
+  border: 1px solid var(--brass-bright);
+  color: #ffffff;
+  font-size: 1.15rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  touch-action: pan-y;
+}
+
+/* Settings Modal 3-Column Responsive Grid */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.settings-card {
+  background: rgba(12, 5, 1, 0.65);
+  border: 1px solid rgba(199, 152, 56, 0.45);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settings-card legend {
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--brass-specular);
+  padding: 0 6px;
+  letter-spacing: 0.5px;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.setting-label-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-row label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ead6b3;
+}
+
+.setting-row output {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--brass-bright);
+}
+
+.brass-select {
+  width: 100%;
+  padding: 6px 8px;
+  background: #140802;
+  border: 1px solid var(--brass-mid);
+  border-radius: 5px;
+  color: var(--brass-specular);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.setting-row input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #0d0501;
+  border: 1px solid rgba(199, 152, 56, 0.5);
+  border-radius: 3px;
+}
+
+.setting-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--brass-gradient);
+  border: 1px solid #ffffff;
+  cursor: pointer;
+}
+
+.preset-pills {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.pitch-preset-btn {
+  flex: 1;
+  padding: 4px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: #241005;
+  border: 1px solid rgba(199, 152, 56, 0.4);
+  border-radius: 4px;
+  color: #d6be94;
+}
+
+.pitch-preset-btn.active {
+  background: var(--brass-gradient);
+  color: #1c0c02;
+  font-weight: 800;
+}
+
+.sensor-calibrate-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #120702;
+  padding: 6px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(199, 152, 56, 0.3);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
+.setting-hint {
+  font-size: 0.6rem;
+  color: #bfa57a;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   14. HELP & RAGA LEARNING ACADEMY MODAL TABS & TUTOR CARDS
+   ========================================================================== */
+.academy-tabs {
+  display: flex;
+  background: #140802;
+  border-bottom: 1px solid var(--brass-mid);
+  padding: 0 10px;
+  gap: 6px;
+}
+
+.academy-tab-btn {
+  padding: 8px 14px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #c7ad82;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.academy-tab-btn.active {
+  color: var(--brass-specular);
+  border-bottom-color: var(--brass-bright);
+  background: rgba(217, 170, 67, 0.1);
+}
+
+.tour-diagram-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.tour-card {
+  background: rgba(14, 6, 2, 0.75);
+  border: 1px solid rgba(199, 152, 56, 0.4);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tour-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 7px;
+  background: var(--brass-gradient);
+  color: #1c0c02;
+  font-size: 0.55rem;
+  font-weight: 900;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.tour-card h3 {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--brass-specular);
+}
+
+.tour-card p,
+.tour-card li {
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #e6d4b8;
+}
+
+.tour-card ul {
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Tab 2: Raga & Alankar Split Selector View */
+.tutor-selector-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 12px;
+  min-height: 250px;
+}
+
+.lesson-library-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 58vh;
+  overflow-y: auto;
+  padding-right: 4px;
+  touch-action: pan-y;
+}
+
+.library-group-heading {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--brass-bright);
+  margin: 6px 0 2px;
+}
+
+.lesson-item-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 7px 10px;
+  background: #1a0b03;
+  border: 1px solid rgba(199, 152, 56, 0.35);
+  border-radius: 6px;
+  text-align: left;
+  transition: all 0.12s ease;
+}
+
+.lesson-item-btn strong {
+  font-size: 0.72rem;
+  color: #f7ebd4;
+}
+
+.lesson-item-btn span {
+  font-size: 0.6rem;
+  color: #bfa57a;
+  font-family: var(--font-mono);
+}
+
+.lesson-item-btn.active {
+  background: linear-gradient(90deg, #4a210b 0%, #261004 100%);
+  border-color: var(--brass-specular);
+  box-shadow: 0 0 10px rgba(217, 170, 67, 0.3);
+}
+
+.lesson-detail-card {
+  background: rgba(12, 5, 1, 0.8);
+  border: 1px solid var(--brass-mid);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.lesson-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.lesson-header-row h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--brass-specular);
+  margin-top: 4px;
+}
+
+.mood-pill {
+  padding: 3px 8px;
+  background: rgba(217, 170, 67, 0.18);
+  border: 1px solid var(--brass-mid);
+  border-radius: 12px;
+  font-size: 0.6rem;
+  color: var(--brass-specular);
+  white-space: nowrap;
+}
+
+.lesson-desc {
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: #e8d7bc;
+}
+
+.raga-grammar-box {
+  background: #0d0501;
+  border: 1px solid rgba(199, 152, 56, 0.4);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.grammar-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.7rem;
+}
+
+.grammar-label {
+  min-width: 135px;
+  font-weight: 800;
+  color: var(--brass-bright);
+  font-size: 0.62rem;
+}
+
+.grammar-row code {
+  font-family: var(--font-mono);
+  color: var(--scope-glow);
+  font-size: 0.72rem;
+}
+
+.lesson-action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   15. BATTERY SAVER MODE & COMPACT MOBILE LANDSCAPE BREAKPOINTS
+   ========================================================================== */
+body.battery-saver *,
+body.battery-saver *::before,
+body.battery-saver *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+@media screen and (max-height: 430px) {
+  #studio-hud-bar {
+    height: 44px;
+    min-height: 44px;
+    padding: 2px 6px;
+  }
+  .hud-module {
+    height: 36px;
+    padding: 2px 6px;
+  }
+  #cabinet-control-panel {
+    height: 70px;
+    min-height: 70px;
+    padding: 3px 6px;
+  }
+  .brass-stop-knob {
+    width: 40px;
+    height: 40px;
+  }
+  .knob-face {
+    width: 36px;
+    height: 36px;
+  }
+  .brass-stop-knob.small-knob,
+  .brass-stop-knob.small-knob .knob-face {
+    width: 32px;
+    height: 32px;
+  }
+  #expression-ribbon-bar {
+    height: 26px;
+    min-height: 26px;
+  }
+  .teak-baseboard {
+    height: 16px;
+    min-height: 16px;
+  }
+}
+
+@media screen and (max-width: 740px) {
+  .hud-brand .emblem-text {
+    display: none;
+  }
+  .oscilloscope-frame {
+    width: 85px;
+  }
+  #bellows-assembly {
+    width: 132px;
+    min-width: 132px;
+  }
+  .velvet-sound-grill {
+    display: none;
+  }
+  .tutor-selector-layout {
+    grid-template-columns: 1fr;
+  }
+}
